@@ -8,6 +8,8 @@ import type { FormItemProps, ValidateStatus } from "./types";
 import { useFormConfig } from "./formConfigContext";
 import { cn } from "../utils/cn";
 
+const FieldCompat = (Field as unknown as { default?: typeof Field }).default ?? Field;
+
 function defaultGetValueFromEvent(valuePropName: string, args: unknown[]): unknown {
   const event = args[0] as
     | { target?: { value?: unknown; checked?: unknown } }
@@ -107,7 +109,7 @@ export function FormItem({
   const cfg = useFormConfig();
 
   return (
-    <Field
+    <FieldCompat
       name={name}
       initialValue={initialValue}
       preserve={preserve}
@@ -265,6 +267,6 @@ export function FormItem({
           </FormItemStatusContext.Provider>
         );
       }}
-    </Field>
+    </FieldCompat>
   );
 }
