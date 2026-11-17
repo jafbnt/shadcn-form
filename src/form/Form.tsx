@@ -13,6 +13,8 @@ import { FormConfigContext } from "./formConfigContext";
 import { useItemStatus } from "./useItemStatus";
 import { cn } from "../utils/cn";
 
+const RcFormCompat = (RcForm as unknown as { default?: typeof RcForm }).default ?? RcForm;
+
 function namePathToDomId(formName: string | undefined, path: Array<string | number>): string {
   return [formName, ...path].filter(Boolean).join("_");
 }
@@ -88,7 +90,8 @@ const BaseForm = forwardRef<FormRef, FormProps>((props, ref) => {
   return (
     <FormConfigContext.Provider value={cfg}>
       <FormInstanceContext.Provider value={mergedForm}>
-        <RcForm
+        <RcFormCompat
+          // rc-field-form may arrive as CJS namespace in some bundlers.
           {...rest}
           ref={ref}
           form={mergedForm}
@@ -108,7 +111,7 @@ const BaseForm = forwardRef<FormRef, FormProps>((props, ref) => {
           data-variant={variant}
         >
           {isRenderChildren ? children : <>{children}</>}
-        </RcForm>
+        </RcFormCompat>
       </FormInstanceContext.Provider>
     </FormConfigContext.Provider>
   );
